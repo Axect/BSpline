@@ -134,9 +134,14 @@ impl BSpline {
 
     fn plot(&self) -> Result<()> {
         let (x, y) = self.interpolate();
+        let mat = py_matrix(self.control_points.clone());
+        let cx = mat.col(0);
+        let cy = mat.col(1);
         let mut plt = Plot2D::new();
-        plt.set_domain(x)
-            .insert_image(y)
+        plt.insert_pair((x.clone(), y.clone()))
+            .insert_pair((cx, cy))
+            .set_plot_type(vec![(1, PlotType::Scatter)])
+            .set_color(vec![(0, "darkblue"), (1, "red")])
             .set_xlabel(r"$x$")
             .set_ylabel(r"$y$")
             .set_style(PlotStyle::Nature)
